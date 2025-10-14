@@ -1,0 +1,27 @@
+# @package _global_
+
+# Config for a pipeline run using a Logistic Regression model.
+
+data:
+  raw_path: "data/raw/train.csv"
+  target_column: "Survived"
+  test_size: 0.2
+  random_state: 42
+  drop_columns:
+    - "PassengerId"
+    - "Name"
+    - "Ticket"
+    - "Cabin"
+
+features:
+  numeric_features: ["Age", "Fare", "SibSp", "Parch"]
+  categorical_features: ["Embarked", "Sex", "Pclass"]
+
+model:
+  name: "Logistic Regression"
+  params:
+    max_iter: 1000
+    C: 1.0
+
+evaluate:
+  save_path: "models/pipeline_${model.name}.joblib"

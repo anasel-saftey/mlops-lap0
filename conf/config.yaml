@@ -1,0 +1,8 @@
+# This is the main entry point for Hydra.
+# It composes the final config from the defaults list.
+
+defaults:
+  # By default, run the random_forest experiment.
+  # This can be overridden from the command line.
+  - pipeline: random_forest
+  - _self_
