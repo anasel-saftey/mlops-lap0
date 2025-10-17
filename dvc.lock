@@ -1,0 +1,80 @@
+schema: '2.0'
+stages:
+  build_features:
+    cmd: python src/features/build_features.py
+    deps:
+    - path: data/raw/train.csv
+      hash: md5
+      md5: 2309cc5f04782ed9bb6016d9f4e381cf
+      size: 61194
+      isexec: true
+    - path: params.yaml
+      hash: md5
+      md5: d52cc156467f8b807d6ad46d8c02c0bb
+      size: 685
+      isexec: true
+    - path: src/features/build_features.py
+      hash: md5
+      md5: 812f738238902013841fd2bd6075b95c
+      size: 2645
+      isexec: true
+    outs:
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 768d12fa38cca6b39f9505853eef8fbf
+      size: 98734
+  train_model:
+    cmd: python src/models/train_model.py
+    deps:
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 768d12fa38cca6b39f9505853eef8fbf
+      size: 98734
+    - path: params.yaml
+      hash: md5
+      md5: d52cc156467f8b807d6ad46d8c02c0bb
+      size: 685
+      isexec: true
+    - path: src/models/train_model.py
+      hash: md5
+      md5: 091c8ad8eb12b794b71a092820faaf3d
+      size: 2014
+      isexec: true
+    params:
+      params.yaml:
+        data:
+          raw_path: data/raw/train.csv
+          processed_path: data/processed/train.csv
+          target_column: Survived
+          test_size: 0.2
+          random_state: 42
+          drop_columns:
+          - PassengerId
+          - Name
+          - Ticket
+          - Cabin
+        features:
+          numeric_features:
+          - Age
+          - Fare
+          - SibSp
+          - Parch
+          categorical_features:
+          - Embarked
+          - Sex
+          - Pclass
+        train:
+          model_name: Random Forest
+          save_path: models/titanic_best_pipeline.joblib
+          model_params:
+            Random Forest:
+              n_estimators: 100
+              max_depth: 10
+            Logistic Regression:
+              max_iter: 1000
+              C: 1.0
+    outs:
+    - path: models/titanic_best_pipeline.joblib
+      hash: md5
+      md5: 600d37d1a519d64c015ccfd3b8a0725d
+      size: 1592271

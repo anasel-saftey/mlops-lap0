@@ -1,0 +1,23 @@
+stages:
+  build_features:
+    cmd: python src/features/build_features.py
+    deps:
+      - src/features/build_features.py
+      - data/raw/train.csv
+      - params.yaml
+    outs:
+      - data/processed/train.csv
+
+  train_model:
+    cmd: python src/models/train_model.py
+    deps:
+      - src/models/train_model.py
+      - data/processed/train.csv
+      - params.yaml
+    params:
+      - data
+      - train
+      - features
+    outs:
+      - models/titanic_best_pipeline.joblib
+

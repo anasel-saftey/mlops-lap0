@@ -1,0 +1,29 @@
+# Single source of truth for all project parameters
+data:
+  raw_path: "data/raw/train.csv"
+  processed_path: "data/processed/train.csv"
+  target_column: "Survived"
+  test_size: 0.2
+  random_state: 42
+  drop_columns:
+    - "PassengerId"
+    - "Name"
+    - "Ticket"
+    - "Cabin"
+
+features:
+  numeric_features: ["Age", "Fare", "SibSp", "Parch"]
+  categorical_features: ["Embarked", "Sex", "Pclass"]
+
+train:
+  model_name: "Random Forest"
+  save_path: "models/titanic_best_pipeline.joblib"
+
+  # A dictionary holding parameters for all possible models
+  model_params:
+    Random Forest:
+      n_estimators: 100
+      max_depth: 10
+    Logistic Regression:
+      max_iter: 1000
+      C: 1.0
