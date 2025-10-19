@@ -18,11 +18,11 @@ MODEL_MAPPING = {
 
 def run_training(params: dict):
     """
-    Loads data, trains ALL models specified in params, and uses MLflow's autologging.
+    Trains all models and registers each one to the MLflow Model Registry.
     """
-    print("--- Starting training with autologging enabled ---")
+    print("--- Starting training and model registration ---")
     
-    # Enable MLflow Autologging
+    # Autolog will handle logging all parameters, metrics, and the model artifact
     mlflow.autolog()
 
     data_params = params['data']
@@ -36,10 +36,10 @@ def run_training(params: dict):
         X, y, test_size=data_params['test_size'], random_state=data_params['random_state']
     )
 
-    # This loop iterates over ALL models listed in the `model_params` section of your YAML
     for model_name in train_params['model_params']:
-        with mlflow.start_run(run_name=model_name):
-            print(f"\n--- Training: {model_name} ---")
+        # By adding 'as run', we can get the run's information, like its ID
+        with mlflow.start_run(run_name=model_name) as run:
+            print(f"\n--- Training and Logging: {model_name} ---")
 
             model_class = MODEL_MAPPING[model_name]
             hyperparameters = train_params['model_params'][model_name]
@@ -47,18 +47,24 @@ def run_training(params: dict):
             model = model_class(**hyperparameters, random_state=data_params['random_state'])
             pipeline = Pipeline(steps=[("classifier", model)])
             
-            print(f"Fitting {model_name}...")
             pipeline.fit(X_train, y_train)
 
-            # Print accuracy for confirmation in the console
-            y_pred = pipeline.predict(X_test)
-            accuracy = accuracy_score(y_test, y_pred)
-            print(f"Accuracy for {model_name}: {accuracy:.4f}")
-            print(f"--- Run for {model_name} automatically logged. ---")
+            # --- KEY CHANGE: REGISTER THE MODEL ---
+            # 1. Get the URI of the model that autolog just saved
+            model_uri = f"runs:/{run.info.run_id}/model"
+            
+            # 2. Create a unique name for the model in the registry
+            # Example: "titanic_random_forest"
+            registered_model_name = f"titanic_{model_name.replace(' ', '_').lower()}"
+            
+            print(f"Registering model to registry as: '{registered_model_name}'")
+            
+            # 3. Register the model
+            mlflow.register_model(model_uri=model_uri, name=registered_model_name)
 
+            print(f"--- Run for {model_name} complete and model registered. ---")
+        model_save_path = Path(train_params['save_path'])
 
-# ... inside the run_training function ...
-    model_save_path = Path(train_params['save_path'])
     model_save_path.parent.mkdir(exist_ok=True, parents=True)
     joblib.dump(pipeline, model_save_path) # <-- This was the line that saved the model
 
@@ -67,5 +73,5 @@ def run_training(params: dict):
 
 if __name__ == "__main__":
     mlflow.set_experiment("Titanic Survival Prediction")
-    params = dvc.api.params_show()  
+    params = dvc.api.params_show()
     run_training(params=params)
