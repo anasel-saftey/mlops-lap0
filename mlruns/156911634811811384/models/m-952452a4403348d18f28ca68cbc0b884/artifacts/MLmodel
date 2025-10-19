@@ -1,0 +1,36 @@
+artifact_path: file:///teamspace/studios/this_studio/mlops-labs/mlruns/156911634811811384/models/m-952452a4403348d18f28ca68cbc0b884/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.12.11
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.3.2
+is_signature_from_type_hint: false
+mlflow_version: 3.5.0
+model_id: m-952452a4403348d18f28ca68cbc0b884
+model_size_bytes: 1101
+model_uuid: m-952452a4403348d18f28ca68cbc0b884
+prompts: null
+run_id: 72525277178d499ca3ae48adfe796fb5
+signature:
+  inputs: '[{"type": "double", "name": "Age", "required": true}, {"type": "double",
+    "name": "Fare", "required": true}, {"type": "double", "name": "SibSp", "required":
+    true}, {"type": "double", "name": "Parch", "required": true}, {"type": "double",
+    "name": "Embarked_C", "required": true}, {"type": "double", "name": "Embarked_Q",
+    "required": true}, {"type": "double", "name": "Embarked_S", "required": true},
+    {"type": "double", "name": "Sex_female", "required": true}, {"type": "double",
+    "name": "Sex_male", "required": true}, {"type": "double", "name": "Pclass_1",
+    "required": true}, {"type": "double", "name": "Pclass_2", "required": true}, {"type":
+    "double", "name": "Pclass_3", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "int64", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2025-10-19 18:33:26.908016'

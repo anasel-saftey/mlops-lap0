@@ -1,0 +1,10 @@
+artifact_location: file:///teamspace/studios/this_studio/mlops-labs/mlruns/156911634811811384/models/m-952452a4403348d18f28ca68cbc0b884/artifacts
+creation_timestamp: 1760898806883
+experiment_id: '156911634811811384'
+last_updated_timestamp: 1760898809926
+model_id: m-952452a4403348d18f28ca68cbc0b884
+model_type: null
+name: model
+source_run_id: 72525277178d499ca3ae48adfe796fb5
+status: 2
+status_message: null

@@ -1,23 +1,30 @@
-import joblib
 import pandas as pd
-from pathlib import Path
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
-import dvc.api # Import the DVC API
+import dvc.api
+import mlflow
+import mlflow.sklearn
+import yaml
+import joblib
+from pathlib import Path
 
 MODEL_MAPPING = {
     "Logistic Regression": LogisticRegression,
     "Random Forest": RandomForestClassifier,
 }
 
-def run_training(params: dict): # Accept params as an argument
-    """Loads processed data and trains a model based on DVC parameters."""
-    print("--- Starting training ---")
+def run_training(params: dict):
+    """
+    Loads data, trains ALL models specified in params, and uses MLflow's autologging.
+    """
+    print("--- Starting training with autologging enabled ---")
+    
+    # Enable MLflow Autologging
+    mlflow.autolog()
 
-    # The params dictionary is now passed in directly from the main block
     data_params = params['data']
     train_params = params['train']
     
@@ -29,29 +36,36 @@ def run_training(params: dict): # Accept params as an argument
         X, y, test_size=data_params['test_size'], random_state=data_params['random_state']
     )
 
-    model_name = train_params['model_name']
-    model_class = MODEL_MAPPING[model_name]
-    hyperparameters = train_params['model_params'][model_name]
-    
-    model = model_class(**hyperparameters, random_state=data_params['random_state'])
-    pipeline = Pipeline(steps=[("classifier", model)])
-    
-    print(f"\n--- Training {model_name} ---")
-    pipeline.fit(X_train, y_train)
+    # This loop iterates over ALL models listed in the `model_params` section of your YAML
+    for model_name in train_params['model_params']:
+        with mlflow.start_run(run_name=model_name):
+            print(f"\n--- Training: {model_name} ---")
 
-    y_pred = pipeline.predict(X_test)
-    accuracy = accuracy_score(y_test, y_pred)
-    print(f"Accuracy for {model_name}: {accuracy:.4f}")
+            model_class = MODEL_MAPPING[model_name]
+            hyperparameters = train_params['model_params'][model_name]
+            
+            model = model_class(**hyperparameters, random_state=data_params['random_state'])
+            pipeline = Pipeline(steps=[("classifier", model)])
+            
+            print(f"Fitting {model_name}...")
+            pipeline.fit(X_train, y_train)
 
+            # Print accuracy for confirmation in the console
+            y_pred = pipeline.predict(X_test)
+            accuracy = accuracy_score(y_test, y_pred)
+            print(f"Accuracy for {model_name}: {accuracy:.4f}")
+            print(f"--- Run for {model_name} automatically logged. ---")
+
+
+# ... inside the run_training function ...
     model_save_path = Path(train_params['save_path'])
     model_save_path.parent.mkdir(exist_ok=True, parents=True)
-    joblib.dump(pipeline, model_save_path)
-    
+    joblib.dump(pipeline, model_save_path) # <-- This was the line that saved the model
+
     print(f"Pipeline saved to: {model_save_path}")
-    print("\n--- Training finished ---")
+    print("\n--- All training runs are complete. ---")
 
 if __name__ == "__main__":
-    # Use the DVC API to load the parameters DVC is tracking
-    params = dvc.api.params_show()
+    mlflow.set_experiment("Titanic Survival Prediction")
+    params = dvc.api.params_show()  
     run_training(params=params)
-

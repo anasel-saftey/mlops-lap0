@@ -10,8 +10,8 @@ stages:
       isexec: true
     - path: params.yaml
       hash: md5
-      md5: d52cc156467f8b807d6ad46d8c02c0bb
-      size: 685
+      md5: 0b71284a34c472b73b084c5e16a1a2dc
+      size: 794
       isexec: true
     - path: src/features/build_features.py
       hash: md5
@@ -32,13 +32,13 @@ stages:
       size: 98734
     - path: params.yaml
       hash: md5
-      md5: d52cc156467f8b807d6ad46d8c02c0bb
-      size: 685
+      md5: 0b71284a34c472b73b084c5e16a1a2dc
+      size: 794
       isexec: true
     - path: src/models/train_model.py
       hash: md5
-      md5: 091c8ad8eb12b794b71a092820faaf3d
-      size: 2014
+      md5: 0c40201a9a42b20efd5ae5cf1aa782ca
+      size: 2562
       isexec: true
     params:
       params.yaml:
@@ -64,7 +64,6 @@ stages:
           - Sex
           - Pclass
         train:
-          model_name: Random Forest
           save_path: models/titanic_best_pipeline.joblib
           model_params:
             Random Forest:
@@ -76,5 +75,5 @@ stages:
     outs:
     - path: models/titanic_best_pipeline.joblib
       hash: md5
-      md5: 600d37d1a519d64c015ccfd3b8a0725d
-      size: 1592271
+      md5: 894077656d5fd93c066b1c357b799207
+      size: 1465

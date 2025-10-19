@@ -16,10 +16,10 @@ features:
   categorical_features: ["Embarked", "Sex", "Pclass"]
 
 train:
-  model_name: "Random Forest"
-  save_path: "models/titanic_best_pipeline.joblib"
+  # model_name: "Random Forest"  <-- REMOVE THIS LINE
+  save_path: "models/titanic_best_pipeline.joblib" # This path is no longer used by MLflow but can be kept for reference
 
-  # A dictionary holding parameters for all possible models
+  # The script will now iterate over every model defined in this dictionary
   model_params:
     Random Forest:
       n_estimators: 100

@@ -1,0 +1,14 @@
+artifact_uri: file:///teamspace/studios/this_studio/mlops-labs/mlruns/156911634811811384/6893f5c2420f4416bfa767a8821b8c68/artifacts
+end_time: 1760899188844
+entry_point_name: ''
+experiment_id: '156911634811811384'
+lifecycle_stage: active
+run_id: 6893f5c2420f4416bfa767a8821b8c68
+run_name: Random Forest
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760899183328
+status: 3
+tags: []
+user_id: anassaied1111
