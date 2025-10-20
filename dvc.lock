@@ -30,6 +30,7 @@ stages:
       hash: md5
       md5: 768d12fa38cca6b39f9505853eef8fbf
       size: 98734
+      isexec: true
     - path: params.yaml
       hash: md5
       md5: 0b71284a34c472b73b084c5e16a1a2dc
@@ -37,8 +38,8 @@ stages:
       isexec: true
     - path: src/models/train_model.py
       hash: md5
-      md5: b4d9a16a53c1a3334366bc6886767e68
-      size: 2917
+      md5: f472ba130a9be4448200facc98336f6f
+      size: 4223
       isexec: true
     params:
       params.yaml:
@@ -75,5 +76,5 @@ stages:
     outs:
     - path: models/titanic_best_pipeline.joblib
       hash: md5
-      md5: 87ad2ca9ea001db3747a5aec83de1e26
-      size: 1465
+      md5: 600d37d1a519d64c015ccfd3b8a0725d
+      size: 1592271
